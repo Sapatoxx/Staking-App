@@ -19,7 +19,9 @@ contract StakingTokenTest is Test{
 
     //Token balance before minting
     uint256 balanceBefore_ = IERC20(address(stakingToken)).balanceOf(randomUser);
+
     stakingToken.mint(amount_);
+    
     //Token balance after minting
     uint256 balanceAfter_ = IERC20(address(stakingToken)).balanceOf(randomUser);
 
