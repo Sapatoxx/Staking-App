@@ -22,13 +22,8 @@ contract StakingAppTest is Test {
 
     function setUp() external {
         stakingToken = new StakingToken(name_, symbol_);
-        stakingApp = new StakingApp(
-            address(stakingToken),
-            owner_,
-            stakingPeriod_,
-            fixedStakingAmount_,
-            rewardPerPeriod_
-        );
+        stakingApp =
+            new StakingApp(address(stakingToken), owner_, stakingPeriod_, fixedStakingAmount_, rewardPerPeriod_);
     }
 
     function testStakingTokenCorrectlyDeployed() external view {
@@ -66,8 +61,8 @@ contract StakingAppTest is Test {
         uint256 etherValue = 1 ether;
         vm.deal(owner_, 1 ether); //El primer parámetro nos indica la persona que va a recibir el dinero y el segundo nos indica la cantidad de ether que le queremos mandar (estamos "imprimiendo un ether" para mandárselo al owner). Aseguramos que el contrato empieza con algo de ether con la funcion vm.deal()
 
-        uint256 balanceBefore = address(stakingApp).balance;  //address(stakingApp).balance nos da el balance de ether del contrato que coloquemos dentro del parentesis
-        (bool success, ) = address(stakingApp).call{value: etherValue}(""); //para un bool que se llama success, el cual tiene que dar "true", la direccion de llamada de stakingApp, la llamamos y le transferimos la cantidad de etherValue;
+        uint256 balanceBefore = address(stakingApp).balance; //address(stakingApp).balance nos da el balance de ether del contrato que coloquemos dentro del parentesis
+        (bool success,) = address(stakingApp).call{value: etherValue}(""); //para un bool que se llama success, el cual tiene que dar "true", la direccion de llamada de stakingApp, la llamamos y le transferimos la cantidad de etherValue;
         uint256 balanceAfter = address(stakingApp).balance;
         require(success, "Ether transfer failed");
 
@@ -182,7 +177,7 @@ contract StakingAppTest is Test {
         stakingToken.mint(tokenAmount);
         uint256 userBalanceBefore = stakingApp.userStakedBalance(randomUser);
         uint256 elapsePeriodBefore = stakingApp.elapsePeriod(randomUser);
-        IERC20(stakingToken).approve(address(stakingApp), tokenAmount); 
+        IERC20(stakingToken).approve(address(stakingApp), tokenAmount);
         stakingApp.depositTokens(tokenAmount);
         uint256 userBalanceAfter = stakingApp.userStakedBalance(randomUser);
         uint256 elapsePeriodAfter = stakingApp.elapsePeriod(randomUser);
@@ -203,7 +198,7 @@ contract StakingAppTest is Test {
         stakingToken.mint(tokenAmount);
         uint256 userBalanceBefore = stakingApp.userStakedBalance(randomUser);
         uint256 elapsePeriodBefore = stakingApp.elapsePeriod(randomUser);
-        IERC20(stakingToken).approve(address(stakingApp), tokenAmount); 
+        IERC20(stakingToken).approve(address(stakingApp), tokenAmount);
         stakingApp.depositTokens(tokenAmount);
         uint256 userBalanceAfter = stakingApp.userStakedBalance(randomUser);
         uint256 elapsePeriodAfter = stakingApp.elapsePeriod(randomUser);
@@ -219,13 +214,12 @@ contract StakingAppTest is Test {
     }
 
     function testCanClaimRewardsCorrectly() external {
-
         vm.startPrank(randomUser);
         uint256 tokenAmount = stakingApp.fixedStakingAmount();
         stakingToken.mint(tokenAmount);
         uint256 userBalanceBefore = stakingApp.userStakedBalance(randomUser);
         uint256 elapsePeriodBefore = stakingApp.elapsePeriod(randomUser);
-        IERC20(stakingToken).approve(address(stakingApp), tokenAmount); 
+        IERC20(stakingToken).approve(address(stakingApp), tokenAmount);
         stakingApp.depositTokens(tokenAmount);
         uint256 userBalanceAfter = stakingApp.userStakedBalance(randomUser);
         uint256 elapsePeriodAfter = stakingApp.elapsePeriod(randomUser);
@@ -236,8 +230,8 @@ contract StakingAppTest is Test {
 
         vm.startPrank(owner_);
         uint256 rewardAmount = 100000 ether;
-        vm.deal(owner_ , rewardAmount); //Aseguramos que el owner tiene ether para mandar al contrato
-        (bool success, ) = address(stakingApp).call{value: rewardAmount}(""); //Mandamos ether al contrato para que pueda pagar las recompensas
+        vm.deal(owner_, rewardAmount); //Aseguramos que el owner tiene ether para mandar al contrato
+        (bool success,) = address(stakingApp).call{value: rewardAmount}(""); //Mandamos ether al contrato para que pueda pagar las recompensas
         require(success, "Ether transfer to contract failed");
         vm.stopPrank();
 
@@ -250,7 +244,7 @@ contract StakingAppTest is Test {
 
         assert(etherAmountAfter - etherAmountBefore == rewardPerPeriod_);
         assert(elapsePeriod == block.timestamp);
-        
+
         vm.stopPrank();
     }
 }
