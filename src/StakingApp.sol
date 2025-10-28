@@ -3,7 +3,7 @@ pragma solidity ^0.8.30;
 import "../lib/openzeppelin-contracts/contracts/access/Ownable.sol";
 import "../lib/openzeppelin-contracts/contracts/token/ERC20/IERC20.sol";
 
-contract stakingApp is Ownable {
+contract StakingApp is Ownable {
   //variables
   address public stakingToken;
   uint256 public stakingPeriod; //in seconds
@@ -30,7 +30,7 @@ contract stakingApp is Ownable {
   ////External functions
   //Deposit
   function depositTokens(uint256 tokenAmountToDeposit_) external {
-    require(tokenAmountToDeposit_ == fixedStakingAmount, "Incorrect deposit amount, must be 10 tokens");
+    require(tokenAmountToDeposit_ == fixedStakingAmount, "Incorrect Amount");
     require(userStakedBalance[msg.sender] == 0, "User already has staked tokens");
     IERC20(stakingToken).transferFrom(msg.sender, address(this), tokenAmountToDeposit_);
     userStakedBalance[msg.sender] += tokenAmountToDeposit_;
